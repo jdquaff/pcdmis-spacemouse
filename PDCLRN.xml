@@ -21,9 +21,13 @@
     Roll left/right    (Ry)      Alt + right-button drag       2D rotate
 
   Wrong direction? Flip that axis's <Reversed>. Too fast or slow? Change its
-  <Scale>, or the speed slider in 3Dconnexion Settings.
+  <Scale> or <OverallScale>. Edit this file rather than using 3Dconnexion
+  Settings: a change there makes 3DxWare rewrite the file, which may drop the
+  <Modifiers> lines. Those come from 3Dconnexion forum guidance and appear in
+  none of the driver's own files.
   Key codes are USB HID usage IDs in hex (E0 = Ctrl, E2 = Alt, 1D = Z,
-  3A = F1, 13 = P). Nothing here starts execution or moves the CMM.
+  3A = F1, 13 = P). None of the keystrokes here starts execution or moves
+  the CMM.
 -->
 <AppCfg xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Default="false" CfgFormatVersion="1.3" ThisFileVersion="1.0">
   <CfgProperties>
@@ -142,7 +146,7 @@
           <ActionID>MenuButton_4</ActionID>
         </Input>
         <Output>
-          <ActionID>Driver_ToggleDominantFilter</ActionID>
+          <ActionID>KB_Esc</ActionID>
         </Output>
       </Button>
     </Menu>
@@ -154,8 +158,8 @@
       <ID>ID_Standard_3D_Mouse</ID>
       <Name>Standard 3D Mouse</Name>
       <!-- Dominant: only the strongest cap motion is sent at any moment, so
-           pan (right button) and rotate (middle button) never hold two mouse
-           buttons at once. -->
+           pan (right button), rotate (middle button) and roll (Alt) are
+           never held together. No button toggles it off. -->
       <AxisFilter>Dominant</AxisFilter>
       <CurrentAxisBank>Default</CurrentAxisBank>
       <AxisBank Default="true">
@@ -168,7 +172,7 @@
             <ActionID>HIDMultiAxis_X</ActionID>
             <Min>-512</Min>
             <Max>511</Max>
-            <Deadband>30</Deadband>
+            <Deadband>60</Deadband>
           </Input>
           <Output>
             <ActionID>HIDMouse_X</ActionID>
@@ -186,7 +190,7 @@
             <ActionID>HIDMultiAxis_Z</ActionID>
             <Min>-512</Min>
             <Max>511</Max>
-            <Deadband>30</Deadband>
+            <Deadband>120</Deadband>
           </Input>
           <Output>
             <ActionID>HIDMouse_Y</ActionID>
@@ -204,7 +208,7 @@
             <ActionID>HIDMultiAxis_Y</ActionID>
             <Min>-512</Min>
             <Max>511</Max>
-            <Deadband>30</Deadband>
+            <Deadband>40</Deadband>
           </Input>
           <Output>
             <ActionID>HIDMouse_Wheel</ActionID>
@@ -219,7 +223,7 @@
             <ActionID>HIDMultiAxis_Rx</ActionID>
             <Min>-512</Min>
             <Max>511</Max>
-            <Deadband>30</Deadband>
+            <Deadband>60</Deadband>
           </Input>
           <Output>
             <ActionID>HIDMouse_Y</ActionID>
@@ -237,7 +241,7 @@
             <ActionID>HIDMultiAxis_Rz</ActionID>
             <Min>-512</Min>
             <Max>511</Max>
-            <Deadband>30</Deadband>
+            <Deadband>60</Deadband>
           </Input>
           <Output>
             <ActionID>HIDMouse_X</ActionID>
@@ -255,7 +259,7 @@
             <ActionID>HIDMultiAxis_Ry</ActionID>
             <Min>-512</Min>
             <Max>511</Max>
-            <Deadband>30</Deadband>
+            <Deadband>80</Deadband>
           </Input>
           <Output>
             <ActionID>HIDMouse_X</ActionID>
@@ -269,8 +273,9 @@
         </Axis>
       </AxisBank>
       <!-- Buttons by function, so mappings follow the button labels on any
-           model. View buttons go to Driver_DevNull rather than reaching
-           PC-DMIS's legacy 3D-mouse handler. -->
+           model. Every other button goes to Driver_DevNull, so none of them
+           reaches PC-DMIS's legacy 3D-mouse handler or sends inherited
+           shortcuts such as Cut, Paste or Select All to the Edit window. -->
       <ButtonBank Default="true">
         <ID>Default</ID>
         <Name>STR_DEFAULT_BUTTONBANK</Name>
@@ -330,7 +335,7 @@
             <ActionID>V3DK_3</ActionID>
           </Input>
           <Output>
-            <ActionID>Driver_ToggleDominantFilter</ActionID>
+            <ActionID>Driver_DevNull</ActionID>
           </Output>
         </Button>
         <Button>
@@ -453,12 +458,196 @@
             <ActionID>Driver_DevNull</ActionID>
           </Output>
         </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_5</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_6</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_7</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_8</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_9</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_10</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_11</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_12</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_VIEW_1</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_VIEW_2</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_VIEW_3</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_VIEWS</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_SAVE_VIEW_1</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_SAVE_VIEW_2</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_SAVE_VIEW_3</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_SAVE_VIEWS</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_SPIN_CW</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_SPIN_CCW</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_TILT_CW</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_TILT_CCW</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_NORMAL</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_USER</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_DOMINANT</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
       </ButtonBank>
     </Device>
     <!-- SpaceMouse Wireless (cabled, receiver, or Universal Receiver):
          left button = PC-DMIS radial menu, right button = Scale to Fit.
          3DxWare's built-in definitions set AxisFilter None per model, so
-         Dominant is repeated for each wireless model. -->
+         Dominant is repeated below for every 3D-mouse model. -->
     <Device>
       <ID>ID_ProductID_C62E</ID>
       <Name>SpaceMouse Wireless</Name>
@@ -521,6 +710,42 @@
     <Device>
       <ID>ID_ProductID_C638</ID>
       <Name>SpaceMouse Pro Wireless</Name>
+      <AxisFilter>Dominant</AxisFilter>
+    </Device>
+    <!-- Wired models -->
+    <Device>
+      <ID>ID_ProductID_C626</ID>
+      <Name>SpaceNavigator</Name>
+      <AxisFilter>Dominant</AxisFilter>
+    </Device>
+    <Device>
+      <ID>ID_ProductID_C628</ID>
+      <Name>SpaceNavigator for Notebooks</Name>
+      <AxisFilter>Dominant</AxisFilter>
+    </Device>
+    <Device>
+      <ID>ID_ProductID_C635</ID>
+      <Name>SpaceMouse Compact</Name>
+      <AxisFilter>Dominant</AxisFilter>
+    </Device>
+    <Device>
+      <ID>ID_ProductID_C636</ID>
+      <Name>SpaceMouse Module</Name>
+      <AxisFilter>Dominant</AxisFilter>
+    </Device>
+    <Device>
+      <ID>ID_ProductID_C62B</ID>
+      <Name>SpaceMouse Pro</Name>
+      <AxisFilter>Dominant</AxisFilter>
+    </Device>
+    <Device>
+      <ID>ID_ProductID_C629</ID>
+      <Name>SpacePilot PRO</Name>
+      <AxisFilter>Dominant</AxisFilter>
+    </Device>
+    <Device>
+      <ID>ID_ProductID_C633</ID>
+      <Name>SpaceMouse Enterprise</Name>
       <AxisFilter>Dominant</AxisFilter>
     </Device>
   </Devices>
