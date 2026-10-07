@@ -3,16 +3,17 @@
     Installs (or removes) the PC-DMIS profile for 3Dconnexion 3DxWare 10.
 
 .DESCRIPTION
-    Copies PC-DMIS.xml into the current user's 3DxWare configuration folder
-    (%APPDATA%\3Dconnexion\3DxWare\Cfg). Any other profile in that folder that
-    also targets PCDLRN.exe would compete with this one, so it is moved to a
-    backup folder next to Cfg (never deleted).
+    Copies PDCLRN.xml into the current user's 3DxWare configuration folder
+    (%APPDATA%\3Dconnexion\3DxWare\Cfg). Any other profile there for PC-DMIS
+    (it mentions PCDLRN or PDCLRN, such as the one 3DxWare creates itself)
+    would compete with this one, so it is moved to a backup folder next to Cfg.
+    Nothing is deleted.
 
-    Close PC-DMIS before running, then restart the 3Dconnexion driver
-    (simplest: sign out and back in, or reboot) so it reloads its profiles.
+    Close PC-DMIS before running, then restart 3DxWare (simplest: sign out
+    of Windows and back in, or reboot) so it reloads its profiles.
 
 .PARAMETER Uninstall
-    Removes PC-DMIS.xml from the Cfg folder (a backup copy is kept).
+    Moves PDCLRN.xml out of the Cfg folder into a backup folder.
 
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File .\install.ps1
@@ -26,7 +27,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$profileName = 'PC-DMIS.xml'
+$profileName = 'PDCLRN.xml'
 $source      = Join-Path $PSScriptRoot $profileName
 $cfgDir      = Join-Path $env:APPDATA '3Dconnexion\3DxWare\Cfg'
 $target      = Join-Path $cfgDir $profileName
@@ -34,7 +35,7 @@ $stamp       = Get-Date -Format 'yyyyMMdd-HHmmss'
 $backupDir   = Join-Path $env:APPDATA "3Dconnexion\3DxWare\Cfg-backup-$stamp"
 
 function Backup-File([string]$path) {
-    if (-not (Test-Path $backupDir)) {
+    if (-not (Test-Path -LiteralPath $backupDir)) {
         New-Item -ItemType Directory -Path $backupDir | Out-Null
     }
     Move-Item -LiteralPath $path -Destination $backupDir
@@ -42,13 +43,13 @@ function Backup-File([string]$path) {
 }
 
 if (Get-Process -Name 'PCDLRN' -ErrorAction SilentlyContinue) {
-    Write-Warning 'PC-DMIS is running. Close it before restarting the 3Dconnexion driver.'
+    Write-Warning 'PC-DMIS is running. Save your work and close it before restarting 3DxWare.'
 }
 
 if ($Uninstall) {
     if (Test-Path -LiteralPath $target) {
         Backup-File $target
-        Write-Host 'Removed the PC-DMIS profile. Restart the 3Dconnexion driver (or sign out and back in).'
+        Write-Host 'Removed the PC-DMIS profile. Restart 3DxWare (sign out and back in, or reboot).'
     } else {
         Write-Host "Nothing to remove: $target does not exist."
     }
@@ -62,17 +63,17 @@ if (-not (Test-Path -LiteralPath $source)) {
 # Refuse to install a file that is not well-formed XML.
 [xml](Get-Content -LiteralPath $source -Raw) | Out-Null
 
-if (-not (Test-Path $cfgDir)) {
+if (-not (Test-Path -LiteralPath $cfgDir)) {
     New-Item -ItemType Directory -Path $cfgDir | Out-Null
 }
 
 Write-Host "3DxWare user configuration folder: $cfgDir"
 
-# Move aside our previous copy and any other profile that claims PCDLRN.exe.
+# Move aside every existing profile that targets PC-DMIS, including our own
+# earlier copy and the PDCLRN.xml that 3DxWare writes when settings change.
 @(Get-ChildItem -LiteralPath $cfgDir -Filter '*.xml') | ForEach-Object {
-    $isOurs       = $_.Name -ieq $profileName
-    $claimsPcdlrn = Select-String -LiteralPath $_.FullName -Pattern 'PCDLRN' -SimpleMatch -Quiet
-    if ($isOurs -or $claimsPcdlrn) {
+    $targetsPcdmis = Select-String -LiteralPath $_.FullName -Pattern 'PCDLRN', 'PDCLRN' -SimpleMatch -Quiet
+    if ($targetsPcdmis) {
         Backup-File $_.FullName
     }
 }
@@ -80,5 +81,5 @@ Write-Host "3DxWare user configuration folder: $cfgDir"
 Copy-Item -LiteralPath $source -Destination $target
 Write-Host "Installed $target"
 Write-Host ''
-Write-Host 'Next: restart the 3Dconnexion driver (sign out and back in, or reboot),'
-Write-Host 'then open PC-DMIS and follow "First-run check" in README.md.'
+Write-Host 'Next: restart 3DxWare (sign out of Windows and back in, or reboot),'
+Write-Host 'then follow "First test" in README.md.'

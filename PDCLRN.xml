@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--
+  3DxWare 10 profile for Hexagon PC-DMIS
+  https://github.com/jdquaff/pcdmis-spacemouse
+
+  Install: copy to %APPDATA%\3Dconnexion\3DxWare\Cfg\PDCLRN.xml (replacing the
+  file 3DxWare created there) and restart 3DxWare. See README.md.
+
+  PC-DMIS (PCDLRN.exe) connects to 3DxWare through the legacy SDK under the
+  name "PDCLRN". By default 3DxWare streams raw 6-DOF motion to it, which
+  locks up PC-DMIS's Graphic Display window. This profile sends PC-DMIS no
+  motion at all. Instead, 3DxWare performs the mouse gestures PC-DMIS
+  already understands (PC-DMIS mouse style, Translate mode):
+
+    Cap motion                   Gesture                       PC-DMIS result
+    Slide left/right   (X)       right-button drag, horiz.     pan
+    Lift up/push down  (Z)       right-button drag, vert.      pan
+    Pull toward/push away (Y)    mouse wheel                   zoom
+    Tilt fwd/back      (Rx)      middle-button drag, vert.     3D rotate
+    Spin               (Rz)      middle-button drag, horiz.    3D rotate
+    Roll left/right    (Ry)      Alt + right-button drag       2D rotate
+
+  Wrong direction? Flip that axis's <Reversed>. Too fast or slow? Change its
+  <Scale>, or the speed slider in 3Dconnexion Settings.
+  Key codes are USB HID usage IDs in hex (E0 = Ctrl, E2 = Alt, 1D = Z,
+  3A = F1, 13 = P). Nothing here starts execution or moves the CMM.
+-->
+<AppCfg xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Default="false" CfgFormatVersion="1.3" ThisFileVersion="1.0">
+  <CfgProperties>
+    <ID>ID_PDCLRN</ID>
+    <Name>PDCLRN</Name>
+    <InheritsFromID>ID_Default_S80_Cfg</InheritsFromID>
+  </CfgProperties>
+  <AppInfo>
+    <Signature>
+      <Name>PDCLRN</Name>
+      <ExecutableName>PCDLRN.exe</ExecutableName>
+      <SiOpenAppName>PDCLRN</SiOpenAppName>
+    </Signature>
+    <Options>
+      <UseSiOpenAppName>true</UseSiOpenAppName>
+    </Options>
+  </AppInfo>
+  <Settings>
+    <OverallScale>1.00</OverallScale>
+    <!-- The legacy-SDK default is ResponseCurve 1.7 with every axis scaled
+         4x. Use linear 1:1 so mouse gestures stay controllable. -->
+    <ResponseCurve>1.0</ResponseCurve>
+    <ScaleX>1.00</ScaleX>
+    <ScaleY>1.00</ScaleY>
+    <ScaleZ>1.00</ScaleZ>
+    <ScaleRx>1.00</ScaleRx>
+    <ScaleRy>1.00</ScaleRy>
+    <ScaleRz>1.00</ScaleRz>
+  </Settings>
+
+  <!-- PC-DMIS keyboard shortcuts (PC-DMIS Help: Shortcut Keys Reference) -->
+  <MacroTable>
+    <MacroEntry>
+      <ID>PCDMIS_ScaleToFit</ID>
+      <Sequence>
+        <KeyPress>E0</KeyPress>
+        <KeyPress>1D</KeyPress>
+        <KeyRelease>1D</KeyRelease>
+        <KeyRelease>E0</KeyRelease>
+      </Sequence>
+    </MacroEntry>
+    <MacroEntry>
+      <ID>PCDMIS_TranslateMode</ID>
+      <Sequence>
+        <KeyPress>E0</KeyPress>
+        <KeyPress>3A</KeyPress>
+        <KeyRelease>3A</KeyRelease>
+        <KeyRelease>E0</KeyRelease>
+      </Sequence>
+    </MacroEntry>
+    <MacroEntry>
+      <ID>PCDMIS_DrawProbePath</ID>
+      <Sequence>
+        <KeyPress>E2</KeyPress>
+        <KeyPress>13</KeyPress>
+        <KeyRelease>13</KeyRelease>
+        <KeyRelease>E2</KeyRelease>
+      </Sequence>
+    </MacroEntry>
+  </MacroTable>
+  <ButtonActions>
+    <ButtonAction Type="Keyboard" xsi:type="ButtonAction_Keyboard">
+      <ID>PCDMIS_ScaleToFit</ID>
+      <Name>Scale to Fit (Ctrl+Z)</Name>
+    </ButtonAction>
+    <ButtonAction Type="Keyboard" xsi:type="ButtonAction_Keyboard">
+      <ID>PCDMIS_TranslateMode</ID>
+      <Name>Translate Mode (Ctrl+F1)</Name>
+    </ButtonAction>
+    <ButtonAction Type="Keyboard" xsi:type="ButtonAction_Keyboard">
+      <ID>PCDMIS_DrawProbePath</ID>
+      <Name>Draw Probe Path (Alt+P)</Name>
+    </ButtonAction>
+    <ButtonAction Type="Menu" xsi:type="ButtonAction_Menu">
+      <ID>RadialMenu_PCDMIS</ID>
+      <Name>PC-DMIS</Name>
+      <Image>
+        <Source>[driver_images:HIDMouse_RadialMenu.png]</Source>
+      </Image>
+      <MenuID>MenuRM_PCDMIS</MenuID>
+    </ButtonAction>
+  </ButtonActions>
+  <Menus>
+    <Executable>3DxPieMenus.exe</Executable>
+    <Menu Type="Radial">
+      <ID>MenuRM_PCDMIS</ID>
+      <Name>PC-DMIS</Name>
+      <GesturesEnabled>true</GesturesEnabled>
+      <Style>FourButton</Style>
+      <Button>
+        <Input>
+          <ActionID>MenuButton_1</ActionID>
+        </Input>
+        <Output>
+          <ActionID>PCDMIS_TranslateMode</ActionID>
+        </Output>
+      </Button>
+      <Button>
+        <Input>
+          <ActionID>MenuButton_2</ActionID>
+        </Input>
+        <Output>
+          <ActionID>PCDMIS_DrawProbePath</ActionID>
+        </Output>
+      </Button>
+      <Button>
+        <Input>
+          <ActionID>MenuButton_3</ActionID>
+        </Input>
+        <Output>
+          <ActionID>Driver_ShowDriverGUI</ActionID>
+        </Output>
+      </Button>
+      <Button>
+        <Input>
+          <ActionID>MenuButton_4</ActionID>
+        </Input>
+        <Output>
+          <ActionID>Driver_ToggleDominantFilter</ActionID>
+        </Output>
+      </Button>
+    </Menu>
+  </Menus>
+
+  <Devices>
+    <!-- Every 3Dconnexion 3D mouse inherits this section. -->
+    <Device>
+      <ID>ID_Standard_3D_Mouse</ID>
+      <Name>Standard 3D Mouse</Name>
+      <!-- Dominant: only the strongest cap motion is sent at any moment, so
+           pan (right button) and rotate (middle button) never hold two mouse
+           buttons at once. -->
+      <AxisFilter>Dominant</AxisFilter>
+      <CurrentAxisBank>Default</CurrentAxisBank>
+      <AxisBank Default="true">
+        <ID>Default</ID>
+        <Name>STR_DEFAULT_BANK</Name>
+        <!-- Pan left/right: right-button drag, horizontal -->
+        <Axis>
+          <Enabled>true</Enabled>
+          <Input>
+            <ActionID>HIDMultiAxis_X</ActionID>
+            <Min>-512</Min>
+            <Max>511</Max>
+            <Deadband>30</Deadband>
+          </Input>
+          <Output>
+            <ActionID>HIDMouse_X</ActionID>
+            <Scale>1.00</Scale>
+            <Modifiers>
+              <Modifier>RightMouse</Modifier>
+            </Modifiers>
+            <Reversed>false</Reversed>
+          </Output>
+        </Axis>
+        <!-- Pan up/down: right-button drag, vertical -->
+        <Axis>
+          <Enabled>true</Enabled>
+          <Input>
+            <ActionID>HIDMultiAxis_Z</ActionID>
+            <Min>-512</Min>
+            <Max>511</Max>
+            <Deadband>30</Deadband>
+          </Input>
+          <Output>
+            <ActionID>HIDMouse_Y</ActionID>
+            <Scale>1.00</Scale>
+            <Modifiers>
+              <Modifier>RightMouse</Modifier>
+            </Modifiers>
+            <Reversed>false</Reversed>
+          </Output>
+        </Axis>
+        <!-- Zoom: mouse wheel -->
+        <Axis>
+          <Enabled>true</Enabled>
+          <Input>
+            <ActionID>HIDMultiAxis_Y</ActionID>
+            <Min>-512</Min>
+            <Max>511</Max>
+            <Deadband>30</Deadband>
+          </Input>
+          <Output>
+            <ActionID>HIDMouse_Wheel</ActionID>
+            <Scale>1.00</Scale>
+            <Reversed>false</Reversed>
+          </Output>
+        </Axis>
+        <!-- Tilt: middle-button drag, vertical (3D rotate) -->
+        <Axis>
+          <Enabled>true</Enabled>
+          <Input>
+            <ActionID>HIDMultiAxis_Rx</ActionID>
+            <Min>-512</Min>
+            <Max>511</Max>
+            <Deadband>30</Deadband>
+          </Input>
+          <Output>
+            <ActionID>HIDMouse_Y</ActionID>
+            <Scale>1.00</Scale>
+            <Modifiers>
+              <Modifier>MiddleMouse</Modifier>
+            </Modifiers>
+            <Reversed>false</Reversed>
+          </Output>
+        </Axis>
+        <!-- Spin: middle-button drag, horizontal (3D rotate) -->
+        <Axis>
+          <Enabled>true</Enabled>
+          <Input>
+            <ActionID>HIDMultiAxis_Rz</ActionID>
+            <Min>-512</Min>
+            <Max>511</Max>
+            <Deadband>30</Deadband>
+          </Input>
+          <Output>
+            <ActionID>HIDMouse_X</ActionID>
+            <Scale>1.00</Scale>
+            <Modifiers>
+              <Modifier>MiddleMouse</Modifier>
+            </Modifiers>
+            <Reversed>true</Reversed>
+          </Output>
+        </Axis>
+        <!-- Roll: Alt + right-button drag, horizontal (2D rotate) -->
+        <Axis>
+          <Enabled>true</Enabled>
+          <Input>
+            <ActionID>HIDMultiAxis_Ry</ActionID>
+            <Min>-512</Min>
+            <Max>511</Max>
+            <Deadband>30</Deadband>
+          </Input>
+          <Output>
+            <ActionID>HIDMouse_X</ActionID>
+            <Scale>1.00</Scale>
+            <Modifiers>
+              <Modifier>Alt</Modifier>
+              <Modifier>RightMouse</Modifier>
+            </Modifiers>
+            <Reversed>false</Reversed>
+          </Output>
+        </Axis>
+      </AxisBank>
+      <!-- Buttons by function, so mappings follow the button labels on any
+           model. View buttons go to Driver_DevNull rather than reaching
+           PC-DMIS's legacy 3D-mouse handler. -->
+      <ButtonBank Default="true">
+        <ID>Default</ID>
+        <Name>STR_DEFAULT_BUTTONBANK</Name>
+        <InheritsFromID/>
+        <Button>
+          <Input>
+            <ActionID>V3DK_MENU</ActionID>
+          </Input>
+          <Output>
+            <ActionID>RadialMenu_PCDMIS</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_FIT</ActionID>
+          </Input>
+          <Output>
+            <ActionID>PCDMIS_ScaleToFit</ActionID>
+          </Output>
+        </Button>
+        <!-- SpaceMouse Wireless reports its buttons as children of
+             V3DK_MENU_1 / V3DK_MENU_2; map those the same way. -->
+        <Button>
+          <Input>
+            <ActionID>V3DK_MENU_1</ActionID>
+          </Input>
+          <Output>
+            <ActionID>RadialMenu_PCDMIS</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_MENU_2</ActionID>
+          </Input>
+          <Output>
+            <ActionID>PCDMIS_ScaleToFit</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_1</ActionID>
+          </Input>
+          <Output>
+            <ActionID>PCDMIS_TranslateMode</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_2</ActionID>
+          </Input>
+          <Output>
+            <ActionID>PCDMIS_DrawProbePath</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_3</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_ToggleDominantFilter</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_4</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_ShowDriverGUI</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_ESC</ActionID>
+          </Input>
+          <Output>
+            <ActionID>KB_Esc</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_ALT</ActionID>
+          </Input>
+          <Output>
+            <ActionID>KB_Alt</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_SHIFT</ActionID>
+          </Input>
+          <Output>
+            <ActionID>KB_Shift</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_CTRL</ActionID>
+          </Input>
+          <Output>
+            <ActionID>KB_Ctrl</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_TOP</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_LEFT</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_RIGHT</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_FRONT</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_BOTTOM</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_BACK</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_ROLL_CW</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_ROLL_CCW</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_ISO1</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>V3DK_ISO2</ActionID>
+          </Input>
+          <Output>
+            <ActionID>Driver_DevNull</ActionID>
+          </Output>
+        </Button>
+      </ButtonBank>
+    </Device>
+    <!-- SpaceMouse Wireless (cabled, receiver, or Universal Receiver):
+         left button = PC-DMIS radial menu, right button = Scale to Fit.
+         3DxWare's built-in definitions set AxisFilter None per model, so
+         Dominant is repeated for each wireless model. -->
+    <Device>
+      <ID>ID_ProductID_C62E</ID>
+      <Name>SpaceMouse Wireless</Name>
+      <AxisFilter>Dominant</AxisFilter>
+      <ButtonBank Default="true">
+        <ID>Default</ID>
+        <Name>STR_DEFAULT_BUTTONBANK</Name>
+        <InheritsFromID/>
+        <Button>
+          <Input>
+            <ActionID>HIDButton_1</ActionID>
+          </Input>
+          <Output>
+            <ActionID>RadialMenu_PCDMIS</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>HIDButton_2</ActionID>
+          </Input>
+          <Output>
+            <ActionID>PCDMIS_ScaleToFit</ActionID>
+          </Output>
+        </Button>
+      </ButtonBank>
+    </Device>
+    <!-- SpaceMouse Wireless Bluetooth Edition -->
+    <Device>
+      <ID>ID_ProductID_C63A</ID>
+      <Name>SpaceMouse Wireless</Name>
+      <AxisFilter>Dominant</AxisFilter>
+      <ButtonBank Default="true">
+        <ID>Default</ID>
+        <Name>STR_DEFAULT_BUTTONBANK</Name>
+        <InheritsFromID/>
+        <Button>
+          <Input>
+            <ActionID>HIDButton_1</ActionID>
+          </Input>
+          <Output>
+            <ActionID>RadialMenu_PCDMIS</ActionID>
+          </Output>
+        </Button>
+        <Button>
+          <Input>
+            <ActionID>HIDButton_2</ActionID>
+          </Input>
+          <Output>
+            <ActionID>PCDMIS_ScaleToFit</ActionID>
+          </Output>
+        </Button>
+      </ButtonBank>
+    </Device>
+    <!-- SpaceMouse Pro Wireless (C631) and its Bluetooth model (C638) -->
+    <Device>
+      <ID>ID_ProductID_C631</ID>
+      <Name>SpaceMouse Pro Wireless</Name>
+      <AxisFilter>Dominant</AxisFilter>
+    </Device>
+    <Device>
+      <ID>ID_ProductID_C638</ID>
+      <Name>SpaceMouse Pro Wireless</Name>
+      <AxisFilter>Dominant</AxisFilter>
+    </Device>
+  </Devices>
+</AppCfg>

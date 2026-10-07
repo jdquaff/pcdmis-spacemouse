@@ -1,157 +1,147 @@
 # SpaceMouse profile for PC-DMIS
 
-A 3DxWare 10 application profile that lets a 3Dconnexion SpaceMouse (including
-the wireless models) pan, zoom, and rotate the CAD model in PC-DMIS's
-Graphic Display window.
+A 3DxWare 10 profile that lets a 3Dconnexion SpaceMouse (including the
+wireless models) pan, zoom, and rotate the CAD model in PC-DMIS's Graphic
+Display window, instead of freezing it.
 
-## Why it doesn't work out of the box
+Built against 3DxWare 10.9.13 (driver 17.9.13) and PC-DMIS 2024.2, using
+3DxWare's own configuration files as the reference for every name in it.
 
-PC-DMIS's built-in 3D mouse support was written for the old **3DxWare 9**
-driver. Hexagon's setup instructions still tell you to edit a `user??.scg` file
-and add `EXECUTABLES = { "PCDLRN.exe" }`
-([PC-DMIS Help: Editing the 3DxWare Configuration File](https://docs.hexagonmi.com/pcdmis/2023.1/en/helpcenter/mergedProjects/core/13_hardware_topics/Editing_the_3DxWare_Configuration_File.htm)).
-Wireless SpaceMice run on **3DxWare 10**, which doesn't use `.scg` files. It
-picks an XML profile by the program's `.exe` name
-([3Dconnexion Admin Guide §5](https://download.3dconnexion.com/drivers/technical_support/3Dconnexion_Admin_Guide_v10-7-1_rev01.pdf)).
-No profile exists for `PCDLRN.exe`, so the driver treats PC-DMIS like any
-unknown program, and pushing the cap does little more than scroll the mouse
-wheel.
+## The problem
+
+PC-DMIS has old built-in 3D-mouse code that connects to the 3Dconnexion driver
+under the name **PDCLRN**, not the program file name PCDLRN.exe. That's why
+3Dconnexion Settings shows "PDCLRN" when PC-DMIS is in front. 3DxWare treats
+PDCLRN as a legacy program and streams raw 6-axis motion to it. Its default
+profile for legacy programs also multiplies every axis by 4 and adds a steep
+acceleration curve. When that motion reaches PC-DMIS, the Graphic Display
+window locks up and ignores even the normal mouse until PC-DMIS is restarted.
+
+Hexagon's setup instructions (editing a `user??.scg` file) are written for the
+old 3DxWare 9 driver and don't apply to 3DxWare 10.
 
 ## What this profile does
 
-PC-DMIS already responds to mouse gestures in the Graphic Display window
-([PC-DMIS Help: Pan, Zoom, Rotate tab](https://docs.hexagonmi.com/pcdmis/2022.2/en/helpcenter/mergedprojects/core/07_edit_cad_topics/Pan_Zoom_Rotate_Tab.htm),
-[Shortcut Keys Reference](https://docs.hexagonmi.com/pcdmis/2023.1/en/helpcenter/mergedProjects/core/app_j_shortcuts_topics/Shortcut_Keys_Reference.htm)).
-This profile makes the 3Dconnexion driver perform those gestures for you,
-following each cap motion:
+`PDCLRN.xml` replaces the profile 3DxWare uses for PDCLRN. It sends PC-DMIS
+**no raw motion at all**. Instead, 3DxWare performs the mouse gestures PC-DMIS
+already understands in the Graphic Display window:
 
-| Cap motion | PC-DMIS result | Gesture the driver performs |
+| Cap motion | PC-DMIS result | Gesture 3DxWare performs |
 |---|---|---|
-| Slide left / right | Pan left / right | Right-button drag, horizontal |
-| Pull up / push down | Pan up / down | Right-button drag, vertical |
-| Pull toward you / push away | Zoom in / out | Mouse wheel |
-| Tilt forward / back | Rotate (3D) up / down | Middle-button drag, vertical |
-| Spin (twist) | Rotate (3D) left / right | Middle-button drag, horizontal |
-| Roll left / right | Rotate in the screen plane (2D) | Alt + right-button drag |
+| Slide left / right | Pan | Right-button drag, horizontal |
+| Lift up / push down | Pan | Right-button drag, vertical |
+| Pull toward you / push away | Zoom | Mouse wheel |
+| Tilt forward / back | 3D rotate | Middle-button drag, vertical |
+| Spin (twist) | 3D rotate | Middle-button drag, horizontal |
+| Roll left / right | 2D rotate (in the screen plane) | Alt + right-button drag |
 
 Buttons:
 
 | Button | Action |
 |---|---|
-| SpaceMouse Wireless **right** button (**Fit** on other models) | Scale to Fit (`Ctrl+Z`) |
-| SpaceMouse Wireless **left** button (**Menu** on other models) | PC-DMIS radial menu (below) |
-| SpaceMouse Pro **1** / **2** / **3** / **4** | Translate mode (`Ctrl+F1`) / Draw probe path (`Alt+P`) / Dominant axis on/off / 3Dconnexion settings |
+| **Right** button on SpaceMouse Wireless (**Fit** on other models) | Scale to Fit (`Ctrl+Z`) |
+| **Left** button on SpaceMouse Wireless (**Menu** on other models) | PC-DMIS radial menu: Translate mode, Draw probe path, 3Dconnexion Settings, Dominant on/off |
+| SpaceMouse Pro **1** / **2** / **3** / **4** | Translate mode / Draw probe path / Dominant on/off / 3Dconnexion Settings |
 | SpaceMouse Pro **Esc**, **Alt**, **Shift**, **Ctrl** | The same keyboard keys |
+| SpaceMouse Pro view buttons (T, R, F, roll) | Nothing (kept away from PC-DMIS's legacy handler) |
 
-The radial menu has: Scale to Fit, Translate mode, Draw probe path, Esc, lock
-rotation, lock pan/zoom, Dominant axis on/off, and 3Dconnexion settings.
+Only one cap motion is sent at a time ("Dominant"). Pan and rotate use
+different mouse buttons, so mixing them would press both at once.
 
-The profile never sends Execute or any other command that runs a routine or
-moves the machine.
-
-## Requirements
-
-- Windows with **3DxWare 10** (the current 3Dconnexion driver).
-- PC-DMIS with the default mouse style. Go to **Edit > Graphic Display
-  Window > Lighting, Materials**, open the **Pan, Zoom, Rotate** tab, and check
-  that the **CAD Systems** list under **Mouse Controls** is set to
-  **PC-DMIS** (not CATIA, Creo, NX, or SolidWorks). The menu path can differ
-  slightly between PC-DMIS versions.
-- PC-DMIS in **Translate mode** (`Ctrl+F1`), which is its normal mode. In
-  Rotate 2D or Rotate 3D mode, a right-button drag rotates instead of panning.
-  If panning ever starts rotating, press Translate mode on the radial menu.
+Nothing in the profile starts execution or moves the CMM.
 
 ## Install
 
-1. Close PC-DMIS.
+1. In PC-DMIS, **save your work**, then close PC-DMIS.
 2. Download this repository (green **Code** button > **Download ZIP**) and unzip it.
-3. Right-click `install.ps1` > **Run with PowerShell**, or from a PowerShell
-   window in that folder run:
+3. In the unzipped folder, right-click `install.ps1` > **Run with PowerShell**,
+   or run this in a PowerShell window in that folder:
 
    ```powershell
    powershell -ExecutionPolicy Bypass -File .\install.ps1
    ```
 
-   The script copies `PC-DMIS.xml` into `%APPDATA%\3Dconnexion\3DxWare\Cfg`.
-   Any other profile there that targets `PCDLRN.exe` is moved to a
-   `Cfg-backup-<date>` folder, not deleted.
+   This copies `PDCLRN.xml` into `%APPDATA%\3Dconnexion\3DxWare\Cfg`. The
+   `PDCLRN.xml` that 3DxWare created there, and any other PC-DMIS profile, is
+   moved to a `Cfg-backup-<date>` folder. Nothing is deleted.
 
    **Manual alternative:** paste `%APPDATA%\3Dconnexion\3DxWare\Cfg` into the
-   Explorer address bar and copy `PC-DMIS.xml` there.
-4. Restart the 3Dconnexion driver. Signing out and back in, or rebooting, is
-   the simplest way.
+   Explorer address bar, move any existing `PDCLRN.xml` somewhere safe, and
+   copy this `PDCLRN.xml` in.
+4. Restart 3DxWare: sign out of Windows and back in, or reboot.
 
-To uninstall, run `install.ps1 -Uninstall`, or delete `PC-DMIS.xml` from that
-folder and restart the driver.
+## First test
 
-## First-run check (two minutes)
-
-The motion directions were worked out from 3Dconnexion's axis conventions and
-PC-DMIS's documented gestures, not tested on a live PC-DMIS seat. Check them
-once:
-
-1. Open PC-DMIS, load a routine with CAD, and click once on the CAD view.
-   Leave the mouse pointer near the **middle of the CAD view**.
-2. Open 3Dconnexion Settings (radial menu > settings, or the tray icon). The
-   application name at the top should read **PC-DMIS**. If it doesn't, see
-   Troubleshooting.
-3. Try each motion from the table above. The model should move the way you
-   move the cap, as if you were holding the part.
-4. If a motion goes the wrong way, open `PC-DMIS.xml` in Notepad, find that
-   motion's `<Axis>` block (each has a comment such as `<!-- Spin: ... -->`),
-   and swap its `<Reversed>` value between `true` and `false`. Save, then
-   restart the driver.
+1. Open PC-DMIS and a routine with CAD, and click once on the CAD view. Leave
+   the mouse pointer near the **middle of the CAD view**.
+2. **Check that the profile is active:** press the SpaceMouse **left** button
+   (**Menu** on larger models). You should see a radial menu titled
+   **PC-DMIS** with Translate mode, Draw probe path, 3Dconnexion Settings, and
+   Dominant. If you get 3Dconnexion's "Common Tools" menu instead, the profile
+   isn't loaded; see Troubleshooting.
+3. **Nudge the cap gently, once.** If the view freezes again, stop: 3DxWare is
+   still sending raw motion, and the profile needs another change. Report it
+   (see below).
+4. Try each motion from the table. The model should move the way you move
+   the cap, as if you were holding the part.
+5. If a motion goes the wrong way, open `PDCLRN.xml` from the Cfg folder in
+   Notepad. Find that motion's `<Axis>` block (each has a comment such as
+   `<!-- Spin: ... -->`) and swap its `<Reversed>` between `true` and `false`.
+   Save, then restart 3DxWare.
 
 ## Tuning
 
-- **Speed:** use the speed slider in 3Dconnexion Settings, or edit
-  `<OverallScale>` in the XML (`0.50` is half speed).
-- **Accidental drift:** raise `<Deadband>` (out of 512) on the affected axis.
-- **Diagonal rotation:** the profile uses a *Dominant* filter, which sends only
-  the strongest cap motion at any moment. Pan and rotate use different mouse
-  buttons, and pressing both at once confuses PC-DMIS. Turning the filter off
-  (radial menu, or SpaceMouse Pro button 3) allows tilt and spin together,
-  but pan may then leak into rotation.
-- **Disable a motion:** set that axis's `<Enabled>` to `false`.
+- **Speed:** use the speed slider in 3Dconnexion Settings. To change one
+  motion only, edit that axis's `<Scale>` (`0.50` is half speed).
+- **Accidental drift:** raise that axis's `<Deadband>` (out of 512).
+- **Turn a motion off:** set that axis's `<Enabled>` to `false`.
+- **Diagonal rotation:** turn Dominant off from the radial menu. Tilt and spin
+  can then combine, but pan may leak into rotation.
 
-## Known limitations
+## Requirements and known limitations
 
-These follow from driving PC-DMIS through mouse gestures. PC-DMIS offers no
-other way in for a 3DxWare 10 device.
-
-- **Keep the pointer over the CAD view.** The driver drags wherever the pointer
-  is. Over the Edit window, a drag would act on the Edit window instead.
+- **PC-DMIS mouse style.** Go to Edit > Graphic Display Window > Lighting,
+  Materials. On the Pan, Zoom, Rotate tab, set the CAD Systems list (under
+  Mouse Controls) to **PC-DMIS**.
+- **Translate mode** (`Ctrl+F1`, PC-DMIS's normal mode). In Rotate 2D or
+  Rotate 3D mode, a right-button drag rotates instead of panning. Use
+  Translate mode from the radial menu to get back.
+- **Keep the pointer over the CAD view.** 3DxWare drags wherever the pointer
+  is.
 - **The pointer moves while you navigate.** If rotation or panning stops, the
-  pointer has reached the edge of the screen. Let go of the cap, move the
-  mouse back to the middle of the CAD view, and continue.
-- **Roll uses the Alt key.** If PC-DMIS's menu bar gets keyboard focus after a
-  roll, press `Esc`. If this keeps happening, disable the roll axis
-  (`HIDMultiAxis_Ry`).
-- Only one motion at a time while Dominant is on (see Tuning).
+  pointer has reached the edge of the screen. Let go, move the mouse back to
+  the middle of the CAD view, and continue.
+- **Roll uses the Alt key.** If PC-DMIS's menu bar gets keyboard focus after
+  a roll, press `Esc`. If that keeps happening, set the Roll axis's
+  `<Enabled>` to `false`.
 
 ## Troubleshooting
 
-**3Dconnexion Settings doesn't show "PC-DMIS" while PC-DMIS is in front.**
-The driver didn't load the profile. Check that the file is at
-`%APPDATA%\3Dconnexion\3DxWare\Cfg\PC-DMIS.xml`, and restart the driver. If
-the settings window shows a different application name, PC-DMIS may be
-connecting through its own legacy 3D-mouse interface. Note that name and
-whether a small mode symbol appears in the bottom-right corner of the Graphic
-Display window, then open an issue on this repository.
+**The left button doesn't show the PC-DMIS menu.** Check that
+`%APPDATA%\3Dconnexion\3DxWare\Cfg\PDCLRN.xml` is this file (it starts with a
+comment mentioning github.com/jdquaff/pcdmis-spacemouse). Then restart
+3DxWare. Opening 3Dconnexion Settings while PC-DMIS is in front should still
+say **PDCLRN**.
 
-**Nothing moves, but the buttons work.** Make sure the CAD view has focus
-(click it once) and the pointer is over it.
+**The view still freezes when the cap moves.** Restart PC-DMIS, then open an
+issue with your 3DxWare version and a copy of the `PDCLRN.xml` currently in
+your Cfg folder. 3DxWare rewrites that file whenever you change settings for
+PC-DMIS.
 
-**Panning rotates the model.** PC-DMIS is in a rotate mode. Use Translate mode
-(`Ctrl+F1`) from the radial menu.
+**Panning rotates the model.** PC-DMIS is in a rotate mode. Use Translate
+mode from the radial menu.
 
-**A right-click menu pops up.** Raise the `<Deadband>` on the pan axes
-(`HIDMultiAxis_X`, `HIDMultiAxis_Z`).
+**A right-click menu pops up.** Raise `<Deadband>` on the two pan axes
+(`HIDMultiAxis_X` and `HIDMultiAxis_Z`).
+
+To uninstall, run `install.ps1 -Uninstall` (or delete `PDCLRN.xml` from the
+Cfg folder) and restart 3DxWare. 3DxWare then goes back to its default, which
+freezes PC-DMIS again.
 
 ## Reporting results
 
-If something doesn't behave as described, please open an issue with:
+Please open an issue with:
 
 - your PC-DMIS version, 3DxWare version, and SpaceMouse model
-- which motion misbehaves and what it does instead
-- the application name shown in 3Dconnexion Settings while PC-DMIS is in front
+- whether the PC-DMIS radial menu appears
+- which motions work, which go the wrong way, and anything that misbehaves
