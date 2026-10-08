@@ -12,6 +12,8 @@ Notable changes to this project are listed here. The format follows
   safety rules every profile change must keep.
 - A **Bug report** issue form that asks for the PC-DMIS, 3DxWare and
   SpaceMouse details needed to diagnose a problem.
+- `CODE_OF_CONDUCT.md`, the Contributor Covenant 3.0. Report violations to
+  jdquaff@gmail.com.
 
 ## 1.0.0 - 2026-10-08
 

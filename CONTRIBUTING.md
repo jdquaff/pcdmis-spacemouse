@@ -4,6 +4,9 @@ Thanks for helping make SpaceMice work better in PC-DMIS. Bug reports from
 other PC-DMIS setups are especially useful, because the profile has only been
 tested on a few combinations of PC-DMIS, 3DxWare, and SpaceMouse.
 
+Everyone taking part is expected to follow the
+[Code of Conduct](CODE_OF_CONDUCT.md).
+
 ## Reporting a problem
 
 First try the Troubleshooting section of the [README](README.md). If that
