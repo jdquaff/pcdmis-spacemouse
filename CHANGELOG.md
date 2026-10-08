@@ -16,6 +16,8 @@ Notable changes to this project are listed here. The format follows
   jdquaff@gmail.com.
 - `SECURITY.md` explaining how to report safety and security problems
   privately to jdquaff@gmail.com.
+- A pull request template that asks for the versions tested and a checklist
+  of the profile's safety rules.
 
 ## 1.0.0 - 2026-10-08
 
