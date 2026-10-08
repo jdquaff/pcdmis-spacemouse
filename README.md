@@ -1,5 +1,7 @@
 # SpaceMouse profile for PC-DMIS
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A 3DxWare 10 profile that lets a 3Dconnexion SpaceMouse (including the
 wireless models) pan, zoom, and rotate the CAD model in PC-DMIS's Graphic
 Display window, instead of freezing it.
