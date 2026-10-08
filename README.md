@@ -184,3 +184,11 @@ Please open an issue with:
 - your PC-DMIS version, 3DxWare version, and SpaceMouse model
 - whether the PC-DMIS radial menu appears
 - which motions work, which go the wrong way, and anything that misbehaves
+
+## License
+
+Released under the [MIT License](LICENSE). Copyright (c) 2026 jdquaff.
+
+This project is not affiliated with or endorsed by Hexagon or 3Dconnexion.
+PC-DMIS is a trademark of Hexagon. 3Dconnexion, SpaceMouse, and 3DxWare are
+trademarks of 3Dconnexion.
