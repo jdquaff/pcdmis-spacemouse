@@ -14,6 +14,8 @@ Notable changes to this project are listed here. The format follows
   SpaceMouse details needed to diagnose a problem.
 - `CODE_OF_CONDUCT.md`, the Contributor Covenant 3.0. Report violations to
   jdquaff@gmail.com.
+- `SECURITY.md` explaining how to report safety and security problems
+  privately to jdquaff@gmail.com.
 
 ## 1.0.0 - 2026-10-08
 

@@ -9,6 +9,10 @@ Everyone taking part is expected to follow the
 
 ## Reporting a problem
 
+If the problem could affect machine safety, or lets the installer do
+something harmful, follow [SECURITY.md](SECURITY.md) and report it privately
+instead of opening an issue.
+
 First try the Troubleshooting section of the [README](README.md). If that
 doesn't help, open an issue using the **Bug report** form. It asks for:
 
