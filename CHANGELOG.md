@@ -6,6 +6,13 @@ Notable changes to this project are listed here. The format follows
 
 ## Unreleased
 
+### Added
+
+- `CONTRIBUTING.md` with how to report problems and propose changes, and the
+  safety rules every profile change must keep.
+- A **Bug report** issue form that asks for the PC-DMIS, 3DxWare and
+  SpaceMouse details needed to diagnose a problem.
+
 ## 1.0.0 - 2026-10-08
 
 First release. Tested on PC-DMIS 2024.2 with 3DxWare 10.9.13 (driver

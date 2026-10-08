@@ -1,0 +1,103 @@
+name: Bug report
+description: The SpaceMouse doesn't work as described in PC-DMIS
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please try the Troubleshooting section of the README first.
+        Run tests with PC-DMIS offline, or with the CMM idle and not executing.
+
+  - type: input
+    id: pcdmis-version
+    attributes:
+      label: PC-DMIS version
+      placeholder: "2024.2"
+    validations:
+      required: true
+
+  - type: input
+    id: driver-version
+    attributes:
+      label: 3DxWare version
+      description: Shown in Windows Settings > Apps under "3Dconnexion 3DxWare 10".
+      placeholder: "10.9.13"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: model
+    attributes:
+      label: SpaceMouse model
+      options:
+        - SpaceMouse Wireless
+        - SpaceMouse Wireless Bluetooth Edition
+        - SpaceMouse Pro Wireless
+        - SpaceMouse Pro
+        - SpaceMouse Compact
+        - SpaceMouse Enterprise
+        - SpaceNavigator
+        - Other (say which below)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: connection
+    attributes:
+      label: How is it connected?
+      options:
+        - Universal Receiver
+        - Its own wireless receiver
+        - USB cable
+        - Bluetooth
+        - Not sure
+
+  - type: dropdown
+    id: radial-menu
+    attributes:
+      label: Does the PC-DMIS radial menu appear?
+      description: With PC-DMIS in front, press the left button (Menu on larger models).
+      options:
+        - "Yes"
+        - "No, I get 3Dconnexion's Common Tools menu"
+        - "No, the 3Dconnexion Settings window opens"
+        - "No, something else happens"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: motions
+    attributes:
+      label: Which motions misbehave?
+      options:
+        - label: Slide left/right (pan)
+        - label: Lift up/push down (pan)
+        - label: Pull toward you/push away (zoom)
+        - label: Tilt forward/back (3D rotate)
+        - label: Spin (3D rotate)
+        - label: Roll left/right (2D rotate)
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead. For example, a motion goes the wrong way, the view freezes, or a menu pops up.
+    validations:
+      required: true
+
+  - type: textarea
+    id: profile
+    attributes:
+      label: Your PDCLRN.xml
+      description: Paste the contents of %APPDATA%\3Dconnexion\3DxWare\Cfg\PDCLRN.xml. 3DxWare rewrites this file when you change settings, so your copy may differ from the repository's.
+      render: xml
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before reporting
+      options:
+        - label: I installed with install.cmd and then signed out of Windows and back in (or rebooted).
+          required: true
+        - label: PC-DMIS uses the PC-DMIS mouse style and is in Translate mode, as described in the README.
+          required: true
