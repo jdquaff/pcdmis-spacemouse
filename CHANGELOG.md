@@ -18,8 +18,8 @@ Notable changes to this project are listed here. The format follows
   privately to jdquaff@gmail.com.
 - A pull request template that asks for the versions tested and a checklist
   of the profile's safety rules.
-- Latest-release, license, code of conduct, and security policy badges at the
-  top of the README.
+- Latest-release, license, code of conduct, security policy, and contributing
+  badges at the top of the README.
 
 ## 1.0.0 - 2026-10-08
 
