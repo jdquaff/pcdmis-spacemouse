@@ -1,5 +1,6 @@
 # SpaceMouse profile for PC-DMIS
 
+[![Latest release](https://img.shields.io/github/v/release/jdquaff/pcdmis-spacemouse)](https://github.com/jdquaff/pcdmis-spacemouse/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A 3DxWare 10 profile that lets a 3Dconnexion SpaceMouse (including the
