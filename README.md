@@ -3,6 +3,7 @@
 [![Latest release](https://img.shields.io/github/v/release/jdquaff/pcdmis-spacemouse)](https://github.com/jdquaff/pcdmis-spacemouse/releases/latest)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-3.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
+[![Security policy](https://img.shields.io/badge/security-policy-orange.svg)](SECURITY.md)
 
 A 3DxWare 10 profile that lets a 3Dconnexion SpaceMouse (including the
 wireless models) pan, zoom, and rotate the CAD model in PC-DMIS's Graphic
