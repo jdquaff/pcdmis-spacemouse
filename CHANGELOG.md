@@ -18,7 +18,7 @@ Notable changes to this project are listed here. The format follows
   privately to jdquaff@gmail.com.
 - A pull request template that asks for the versions tested and a checklist
   of the profile's safety rules.
-- A license badge at the top of the README.
+- Latest-release and license badges at the top of the README.
 
 ## 1.0.0 - 2026-10-08
 
